@@ -6,6 +6,7 @@ using CoreGraphics;
 using Foundation;
 using UIKit;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
+using Xamarin.Platform;
 using Specifics = Xamarin.Forms.PlatformConfiguration.iOSSpecific.Entry;
 
 namespace Xamarin.Forms.Platform.iOS
@@ -265,6 +266,7 @@ namespace Xamarin.Forms.Platform.iOS
 			Control.VerticalAlignment = Element.VerticalTextAlignment.ToNativeTextAlignment();
 		}
 
+		[PortHandler]
 		protected virtual void UpdateColor()
 		{
 			var textColor = Element.TextColor;
@@ -319,6 +321,7 @@ namespace Xamarin.Forms.Platform.iOS
 			Control.ReloadInputViews();
 		}
 
+		[PortHandler]
 		void UpdatePassword()
 		{
 			if (Element.IsPassword && Control.IsFirstResponder)

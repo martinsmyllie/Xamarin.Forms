@@ -12,6 +12,7 @@ using Android.Widget;
 using AndroidX.Core.Content;
 using Java.Lang;
 using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
+using Xamarin.Platform;
 
 namespace Xamarin.Forms.Platform.Android
 {
@@ -49,6 +50,7 @@ namespace Xamarin.Forms.Platform.Android
 			UpdateTextColor(Element.TextColor);
 		}
 
+		[PortHandler]
 		protected override void UpdateTextColor(Color color)
 		{
 			_textColorSwitcher = _textColorSwitcher ?? new TextColorSwitcher(EditText.TextColors, Element.UseLegacyColorManagement());
