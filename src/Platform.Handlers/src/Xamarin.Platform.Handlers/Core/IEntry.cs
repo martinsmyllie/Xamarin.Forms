@@ -2,10 +2,8 @@
 
 namespace Xamarin.Platform
 {
-    public interface IEntry : IView
-    {
-        string Text { get; }
-        Color TextColor { get; }
+    public interface IEntry : IView, IText
+	{
         bool IsPassword { get; }
     }
 }
