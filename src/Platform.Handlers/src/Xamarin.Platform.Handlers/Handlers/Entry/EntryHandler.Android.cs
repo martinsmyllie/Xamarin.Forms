@@ -1,10 +1,11 @@
-﻿using Android.Widget;
+﻿using Android.Content.Res;
+using Android.Widget;
 
 namespace Xamarin.Platform.Handlers
 {
 	public partial class EntryHandler : AbstractViewHandler<IEntry, EditText>
 	{
-		static TextColorSwitcher? TextColorSwitcher { get; set; }
+		static ColorStateList? DefaultTextColors { get; set; }
 
 		protected override EditText CreateNativeView()
 		{
@@ -14,8 +15,7 @@ namespace Xamarin.Platform.Handlers
 		protected override void SetupDefaults(EditText nativeView)
 		{
 			base.SetupDefaults(nativeView);
-
-			TextColorSwitcher = new TextColorSwitcher(nativeView.TextColors);
+			DefaultTextColors = nativeView.TextColors;
 		}
 
 		public static void MapText(EntryHandler handler, IEntry entry)
@@ -29,7 +29,7 @@ namespace Xamarin.Platform.Handlers
 		{
 			ViewHandler.CheckParameters(handler, entry);
 
-			handler.TypedNativeView?.UpdateTextColor(entry, TextColorSwitcher);
+			handler.TypedNativeView?.UpdateTextColor(entry, DefaultTextColors);
 		}
 
 		public static void MapIsPassword(EntryHandler handler, IEntry entry)

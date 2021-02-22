@@ -1,24 +1,38 @@
-﻿using Android.Text;
+﻿using Android.Content.Res;
+using Android.Text;
 using Android.Widget;
 
 namespace Xamarin.Platform
 {
 	public static class EntryExtensions
 	{
+		static readonly int[][] ColorStates = { 
+			new[] { global::Android.Resource.Attribute.StateEnabled }, 
+			new[] { -global::Android.Resource.Attribute.StateEnabled } 
+		};
+
 		public static void UpdateText(this EditText editText, IEntry entry)
 		{
 			editText.Text = entry.Text;
 		}
 
-		public static void UpdateTextColor(this EditText editText, IEntry entry)
+		public static void UpdateTextColor(this EditText editText, IEntry entry, ColorStateList? defaultColor)
 		{
-			editText.UpdateTextColor(entry, null);
-		}
+			var textColor = entry.TextColor;
+			if(textColor.IsDefault)
+			{
+				editText.SetTextColor(defaultColor);
+			}
+			else
+			{
+				var androidColor = textColor.ToNative();
 
-		public static void UpdateTextColor(this EditText editText, IEntry entry, TextColorSwitcher? textColorSwitcher)
-		{
-			textColorSwitcher ??= new TextColorSwitcher(editText.TextColors);
-			textColorSwitcher.UpdateTextColor(editText, entry.TextColor);
+				if (!editText.TextColors.IsOneColor(ColorStates, androidColor))
+				{
+					var acolor = androidColor.ToArgb();
+					editText.SetTextColor(new ColorStateList(ColorStates, new[] { acolor, acolor }));
+				}
+			}
 		}
 
 		public static void UpdateIsPassword(this EditText editText, IEntry entry)
