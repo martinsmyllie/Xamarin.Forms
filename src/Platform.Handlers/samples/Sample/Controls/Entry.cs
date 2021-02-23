@@ -22,5 +22,11 @@ namespace Sample
 			get { return HeightRequest; }
 			set { HeightRequest = value; }
 		}
+
+		public FontAttributes FontAttributes { get; set; }
+
+		public string FontFamily { get; set; }
+
+		public double FontSize { get; set; }
 	}
 }
