@@ -26,7 +26,7 @@ namespace Xamarin.Platform.Handlers.DeviceTests
 				Text = "Test"
 			};
 
-			await ValidatePropertyUpdateValue(entry, () => entry.Text, GetNativeText, () => entry.Text = "Update", "Update");
+			await ValidatePropertyUpdateValue(entry, () => entry.Text, GetNativeText, (e) => e.Text = "Update", "Update");
 		}
 
 		[Fact(DisplayName = "Is TextColor Initializes Correctly")]
