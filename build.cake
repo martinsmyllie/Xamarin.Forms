@@ -899,12 +899,38 @@ Task("Android100")
                     .WithProperty("AndroidTargetFrameworks", "MonoAndroid10.0"));
     });
 
+
+Task("VS")
+    .Description("Builds projects necessary so solution compiles on VS")
+    .IsDependentOn("VSMAC")
+    .IsDependentOn("VSWINDOWS")
+    .Does((ctx) =>
+    { 
+        MSBuild("Xamarin.Forms.sln",
+                GetMSBuildSettings()
+                    .WithRestore()
+                    .WithProperty("AndroidTargetFrameworks", "MonoAndroid10.0"));
+
+        StartVisualStudio(ctx);
+    });
+
+
+Task("VSWINDOWS")
+    .Description("Builds projects necessary so solution compiles on VS Windows")
+    .WithCriteria(IsRunningOnWindows())
+    .IsDependentOn("Clean")
+    .Does((ctx) =>
+    {
+        StartVisualStudio(ctx);
+    });
+
 Task("VSMAC")
     .Description("Builds projects necessary so solution compiles on VSMAC")
-    .IsDependentOn("BuildTasks")
-    .Does(() =>
+    .WithCriteria(!IsRunningOnWindows())
+    .IsDependentOn("Clean")
+    .Does((ctx) =>
     {
-        StartVisualStudio();
+        StartVisualStudio(ctx);
     });
     
 Task("cg-android")
@@ -955,9 +981,9 @@ Task("cg-android-build-tests")
 Task("cg-android-vs")
     .Description("Builds Android Control Gallery and open VS")
     .IsDependentOn("cg-android")
-    .Does(() => 
+    .Does((ctx) => 
     {
-        StartVisualStudio();
+        StartVisualStudio(ctx);
     });
 
 Task("cg-ios")
@@ -987,9 +1013,9 @@ Task("cg-ios")
 Task("cg-ios-vs")
     .Description("Builds iOS Control Gallery and open VS")
     .IsDependentOn("cg-ios")
-    .Does(() =>
+    .Does((ctx) =>
     {   
-        StartVisualStudio();
+        StartVisualStudio(ctx);
     });
 
 Task("cg-ios-build-tests")
@@ -1154,15 +1180,26 @@ T GetBuildVariable<T>(string key, T defaultValue)
     return Argument(key, EnvironmentVariable(key, upperCaseReturnValue));
 }
 
-void StartVisualStudio(string sln = "Xamarin.Forms.sln")
+void StartVisualStudio(ICakeContext context, string sln = "Xamarin.Forms.sln")
 {
     if(isCIBuild)
         return;
+   
+    sln = $"{context.Environment.WorkingDirectory}/{sln}";
+    Information(sln);
 
     if(IsRunningOnWindows())
-         StartProcess("start", new ProcessSettings{ Arguments = "Xamarin.Forms.sln" });
+    {
+        StartProcess("powershell",
+            new ProcessSettings
+            {
+                Arguments = new ProcessArgumentBuilder()
+                    .Append("start")
+                    .Append("Xamarin.Forms.sln")
+            });
+    }
     else
-         StartProcess("open", new ProcessSettings{ Arguments = "Xamarin.Forms.sln" });
+         StartProcess("open", new ProcessSettings{ Arguments = sln });
 }
 
 MSBuildSettings GetMSBuildSettings(PlatformTarget? platformTarget = PlatformTarget.MSIL, string buildConfiguration = null)
