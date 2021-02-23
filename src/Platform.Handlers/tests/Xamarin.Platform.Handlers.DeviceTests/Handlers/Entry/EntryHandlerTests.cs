@@ -18,6 +18,17 @@ namespace Xamarin.Platform.Handlers.DeviceTests
 			await ValidatePropertyInitValue(entry, () => entry.Text, GetNativeText, entry.Text);
 		}
 
+		[Fact(DisplayName = "Text Updates Correctly")]
+		public async Task TextUpdatesCorrectly()
+		{
+			var entry = new EntryStub()
+			{
+				Text = "Test"
+			};
+
+			await ValidatePropertyUpdateValue(entry, () => entry.Text, GetNativeText, () => entry.Text = "Update", "Update");
+		}
+
 		[Fact(DisplayName = "Is TextColor Initializes Correctly")]
 		public async Task TextColorInitializesCorrectly()
 		{

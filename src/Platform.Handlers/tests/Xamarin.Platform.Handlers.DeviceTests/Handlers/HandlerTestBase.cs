@@ -49,5 +49,26 @@ namespace Xamarin.Platform.Handlers.DeviceTests
 			Assert.Equal(expectedValue, values.ViewValue);
 			Assert.Equal(expectedValue, values.NativeViewValue);
 		}
+
+		async protected Task ValidatePropertyUpdateValue<TValue>(
+			IView view,
+			Func<TValue> GetValue,
+			Func<THandler, TValue> GetNativeValue,
+			Action UpdateValue,
+			TValue expectedValue)
+		{
+			var values = await GetValueAsync(view, (handler) =>
+			{
+				UpdateValue.Invoke();
+				return new
+				{
+					ViewValue = GetValue(),
+					NativeViewValue = GetNativeValue(handler)
+				};
+			});
+
+			Assert.Equal(expectedValue, values.ViewValue);
+			Assert.Equal(expectedValue, values.NativeViewValue);
+		}
 	}
 }
