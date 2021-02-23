@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 using Xamarin.Platform;
 using Xamarin.Platform.Core;
@@ -36,6 +37,22 @@ namespace Sample
 			horizontalStack.Add(new Label { Text = "And these buttons are in a HorizontalStackLayout" });
 
 			verticalStack.Add(horizontalStack);
+
+			var monkeyList = new List<string>
+			{
+				"Baboon",
+				"Capuchin Monkey",
+				"Blue Monkey",
+				"Squirrel Monkey",
+				"Golden Lion Tamarin",
+				"Howler Monkey",
+				"Japanese Macaque"
+			};
+
+			var picker = new Picker { Title = "Select a monkey", TitleColor = Color.Red, TextColor = Color.Orange };
+
+			picker.ItemsSource = monkeyList;
+			verticalStack.Add(picker);
 
 			var slider = new Slider();
 			slider.ValueChanged += value => Console.WriteLine($"Slider value: {value:0.000}");
