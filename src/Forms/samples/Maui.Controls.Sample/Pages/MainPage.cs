@@ -2,6 +2,7 @@
 using Xamarin.Forms;
 using Xamarin.Platform;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Maui.Controls.Sample.Pages
 {
@@ -44,10 +45,7 @@ namespace Maui.Controls.Sample.Pages
 			verticalStack.Add(new Entry { Text= "Entry", TextColor = Color.DarkRed });
 			verticalStack.Add(new Entry { IsPassword = true, TextColor = Color.Black });
 
-			var slider = new Slider();
-			slider.ValueChanged += value => Console.WriteLine($"Slider value: {value:0.000}");
-			verticalStack.Add(slider);
-
+			verticalStack.Add(new Slider());
 			verticalStack.Add(new Switch());
 
 			verticalStack.Add(new Switch() { OnColor = Color.Green });
